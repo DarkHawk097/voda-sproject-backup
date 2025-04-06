@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import google.generativeai as genai
 from api_store import api  # Use the API key from api_store.py
-
+import time
 # Configure Gemini API
 genai.configure(api_key=api())
 
@@ -36,3 +36,4 @@ def checker():
 if __name__ == "__main__":
     extract_results()
     print(checker())
+time.sleep(75)

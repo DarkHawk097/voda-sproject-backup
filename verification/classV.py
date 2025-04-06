@@ -2,8 +2,9 @@ import os
 import pandas as pd
 import google.generativeai as gemini
 from api_store import api
+import time
 
-gemini.configure(api_key=(api))
+gemini.configure(api_key=(api()))
 
 # Paths
 base_folder = os.path.abspath(os.path.join(os.getcwd(), "Internet"))
@@ -67,3 +68,4 @@ for _, row in observation_df.iterrows():
 verified_df = pd.DataFrame(verified_files, columns=["filename", "source"])
 verified_df.to_csv(verification_output, index=False)
 print("Verification process completed and saved.")
+time.sleep(45)

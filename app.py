@@ -5,6 +5,17 @@ import subprocess
 import time
 
 app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from app.py!"
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
+
+def wait():
+    time.sleep(1)
+app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 
@@ -43,10 +54,14 @@ def run_script_loop(name, path, delay=20):
     pass
 
 if __name__ == '__main__':
-    
-    threading.Thread(target=run_script_loop, args=('Admin', 'admin/admin.py'), daemon=True).start()
-    threading.Thread(target=run_script_loop, args=('Detection', 'detection/classD.py'), daemon=True).start()
-    threading.Thread(target=run_script_loop, args=('Verification', 'verification/classV.py'), daemon=True).start()
     threading.Thread(target=run_script_loop, args=('Observation', 'observation/classO.py'), daemon=True).start()
+    wait()
+    threading.Thread(target=run_script_loop, args=('Verification', 'verification/classV.py'), daemon=True).start()
+    wait()
+    threading.Thread(target=run_script_loop, args=('Detection', 'detection/classD.py'), daemon=True).start()
+    wait()
+    threading.Thread(target=run_script_loop, args=('Admin', 'admin/admin.py'), daemon=True).start()
+    wait()
+    
 
     socketio.run(app, debug=True)

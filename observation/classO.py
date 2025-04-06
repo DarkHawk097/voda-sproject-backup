@@ -2,8 +2,8 @@ import os
 import pandas as pd
 import google.generativeai as gemini
 from api_store import api
-
-gemini.configure(api_key=(api))
+import time
+gemini.configure(api_key=(api()))
 
 def analyze_filename_with_nlp(filename):
     """
@@ -64,3 +64,4 @@ if __name__ == "__main__":
     
     flagged = process_files(base_folder)
     send_to_verification(flagged, csv_output)
+time.sleep(30)
