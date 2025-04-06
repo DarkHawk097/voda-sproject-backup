@@ -6,7 +6,7 @@ from api_store import api
 import time
 
 time.sleep(3)
-gemini.configure(api_key=(api()))
+gemini.configure(api_key="AIzaSyA-cwP57q6xPa7W5f6s16qKnksv7BRmv1A")
 
 base_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Internet"))
 verification_database = os.path.abspath(os.path.join(os.getcwd(), "datasets", "verification_database.csv"))
@@ -184,4 +184,4 @@ if VerifiDataFrame is not None:
 
 
 Detection()
-time.sleep(60)
+time.sleep(40)

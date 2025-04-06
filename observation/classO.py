@@ -3,7 +3,7 @@ import pandas as pd
 import google.generativeai as gemini
 from api_store import api
 import time
-gemini.configure(api_key=(api()))
+gemini.configure(api_key="AIzaSyDcMLI3Kgb_bZQmTPDUFwKcmqZoupSE3ew")
 
 def wait():
     time.sleep(1)
@@ -69,4 +69,4 @@ if __name__ == "__main__":
     
     flagged = process_files(base_folder)
     send_to_verification(flagged, csv_output)
-time.sleep(60)
+time.sleep(40)
