@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VODA-S Observation Dashboard</title>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .log-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .terminal {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: scroll;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            font-family: monospace;
+        }
+
+        .log-line {
+            margin: 0;
+        }
+
+        .stage {
+            color: #6dd5ed;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>VODA-S: Observation Dashboard</h1>
+
+    <button onclick="startObservation()">Run Observation</button>
+
+    <div class="log-container">
+        <div>
+            <h2>Admin</h2>
+            <div id="log-admin" class="terminal"></div>
+        </div>
+        <div>
+            <h2>Detection</h2>
+            <div id="log-detection" class="terminal"></div>
+        </div>
+        <div>
+            <h2>Verification</h2>
+            <div id="log-verification" class="terminal"></div>
+        </div>
+        <div>
+            <h2>Observation</h2>
+            <div id="log-observation" class="terminal"></div>
+        </div>        
+    </div>
+
+    <script>
+        const socket = io();
+
+        function startObservation() {
+            document.getElementById("log-admin").innerHTML = "";
+            document.getElementById("log-detection").innerHTML = "";
+            document.getElementById("log-verification").innerHTML = "";
+            socket.emit('start_download', { query: 'auto' });
+        }
+
+        socket.on('log', function(data) {
+            let targetLog = null;
+
+            if (data.stage.startsWith('Admin')) {
+                targetLog = document.getElementById("log-admin");
+            } else if (data.stage.startsWith('Detection')) {
+                targetLog = document.getElementById("log-detection");
+            } else if (data.stage.startsWith('Verification')) {
+                targetLog = document.getElementById("log-verification");
+            } else if (data.stage.startsWith('Observation')) {
+                targetLog = document.getElementById("log-observation");
+            }
+            
+            if (targetLog) {
+                const logLine = document.createElement("p");
+                logLine.classList.add("log-line");
+                logLine.innerHTML = `<span class="stage">[${data.stage}]</span> ${data.message}`;
+                targetLog.appendChild(logLine);
+                targetLog.scrollTop = targetLog.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
