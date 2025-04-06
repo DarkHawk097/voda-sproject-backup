@@ -4,6 +4,7 @@ import google.generativeai as genai
 from api_store import api  # Use the API key from api_store.py
 import time
 # Configure Gemini API
+time.sleep(5)
 genai.configure(api_key=api())
 
 def extract_results():
@@ -36,4 +37,4 @@ def checker():
 if __name__ == "__main__":
     extract_results()
     print(checker())
-time.sleep(75)
+time.sleep(60)

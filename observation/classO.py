@@ -5,6 +5,8 @@ from api_store import api
 import time
 gemini.configure(api_key=(api()))
 
+def wait():
+    time.sleep(1)
 def analyze_filename_with_nlp(filename):
     """
     Uses NLP to check if the given filename suggests pirated content.
@@ -14,8 +16,9 @@ def analyze_filename_with_nlp(filename):
     response = model.generate_content(f"Does this filename indicate pirated content? Answer only 1 for Yes, 0 for No: {filename} ignore .txt extension as it's a test to detect filename.")
 
     try:
+        print(f"[CLASS-O>>>CHECK]: Currently checking {filename}...")
+        wait()
         result_text = response.text.strip() if hasattr(response, 'text') else response.candidates[0].content.strip()
-        
         if result_text in ["0", "1"]:
             return int(result_text)
         else:
@@ -42,9 +45,11 @@ def process_files(base_folder):
                     result = analyze_filename_with_nlp(file)  # Analyze the filename
                     if result == 1:
                         print(f"[CLASS_O>>>CHECK]: The File: {file} seems SUSPICIOUS. Flagging for Verification!")
+                        wait()
                         flagged_files.append((file, website))
                     else:
                         print(f"[CLASS_O>>>CHECK]: The File: {file} seems SAFE. Ignoring...")
+                        wait()
                 except Exception as e:
                     print(f"Error processing {file_path}: {e}")
     
@@ -64,4 +69,4 @@ if __name__ == "__main__":
     
     flagged = process_files(base_folder)
     send_to_verification(flagged, csv_output)
-time.sleep(30)
+time.sleep(60)
