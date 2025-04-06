@@ -2,10 +2,10 @@ import os
 import google.generativeai as gemini
 import pandas as pd
 import re
+from api_store import api
 
-# Configure Gemini API
-GEMINI_API_KEY = "AIzaSyDcMLI3Kgb_bZQmTPDUFwKcmqZoupSE3ew"  # Replace with your actual API key
-gemini.configure(api_key=GEMINI_API_KEY)
+gemini.configure(api_key=(api))
+
 base_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Internet"))
 verification_database = os.path.abspath(os.path.join(os.getcwd(), "datasets", "verification_database.csv"))
 key_database = os.path.abspath(os.path.join(os.getcwd(), "datasets", "key_database.csv"))

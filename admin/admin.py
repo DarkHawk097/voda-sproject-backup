@@ -1,14 +1,14 @@
 import os
 import pandas as pd
 import google.generativeai as genai
+from api_store import api  # Use the API key from api_store.py
 
 # Configure Gemini API
-GEMINI_API_KEY = "AIzaSyDcMLI3Kgb_bZQmTPDUFwKcmqZoupSE3ew"  # Replace with your actual API key
-genai.configure(api_key=GEMINI_API_KEY)
+genai.configure(api_key=api())
 
 def extract_results():
-    """Extract verification results from CSV using pandas."""
-    input_path = os.path.join("csv_files", "verification_results.csv")
+    """Extract detection data from the datasets folder."""
+    input_path = os.path.join("datasets", "detection_database.csv")
     
     if not os.path.exists(input_path):
         print(f"File not found: {input_path}")
@@ -25,16 +25,14 @@ def checker():
     if df.empty:
         return []
     
-    pirated_files = df[~df["gemini_verification"].astype(str).str.strip().isin(["0", "1"])].head(7)
-    
-    if not pirated_files.empty:
-        output_path = os.path.join("csv_files", "pirated_files.csv")
-        pirated_files.to_csv(output_path, index=False)
-        print(f"Identified {len(pirated_files)} potentially pirated files. Results saved to {output_path}.")
-    else:
-        print("No pirated files identified.")
-    
-    return pirated_files.to_dict(orient='records')
+    for _, row in df.iterrows():
+        file_name = row.get("flagged_files","file_source")
+        print(f"{file_name} is set to be taken down")
 
-extract_results()
-print(checker())
+    return df.to_dict(orient="records")
+
+
+# Debug/testing
+if __name__ == "__main__":
+    extract_results()
+    print(checker())

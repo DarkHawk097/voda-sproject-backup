@@ -1,8 +1,9 @@
 import os
 import pandas as pd
 import google.generativeai as gemini
+from api_store import api
 
-gemini.configure(api_key="AIzaSyDcMLI3Kgb_bZQmTPDUFwKcmqZoupSE3ew")
+gemini.configure(api_key=(api))
 
 # Paths
 base_folder = os.path.abspath(os.path.join(os.getcwd(), "Internet"))
